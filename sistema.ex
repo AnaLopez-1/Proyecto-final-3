@@ -9,3 +9,6 @@ defmodule Sistema do
 def crear_equipo(nombre, tema) do
     Modelos.Equipo.crear(nombre, tema)
   end
+ def crear_mentor(id, nombre, especialidad) do
+    Modelos.Mentor.crear(id, nombre, especialidad)
+  end
