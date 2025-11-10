@@ -6,3 +6,6 @@ defmodule Sistema do
   def crear_participante(id, nombre, correo, afinidad) do
     Modelos.Participante.crear(id, nombre, correo, afinidad)
   end
+def crear_equipo(nombre, tema) do
+    Modelos.Equipo.crear(nombre, tema)
+  end
