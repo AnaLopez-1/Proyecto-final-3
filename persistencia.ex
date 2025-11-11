@@ -95,3 +95,19 @@ defmodule Persistencia do
       File.write!(archivo, Enum.join(lineas, "\n"))
     end
   end
+
+  #Convierte el tipo a leer
+  defp convertir_tipo(valor) do
+    cond do
+      valor =~ ~r/^\d+$/ -> String.to_integer(valor)
+      valor == "true" -> true
+      valor == "false" -> false
+      String.contains?(valor, ";") -> String.split(valor, ";")
+      true -> valor
+    end
+  end
+
+
+  # ARCHIVO SEGÚN TIPO
+  defp obtener_archivo(tipo), do: "#{tipo}.csv"
+end
