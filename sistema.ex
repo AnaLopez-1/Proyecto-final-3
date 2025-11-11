@@ -83,6 +83,15 @@ def listar_nombre_equipos do
   end
 end
 
+def asignar_equipo(participante, equipo) do
+  nombre_equipo =
+    case equipo do
+      %{nombre: nombre} -> nombre          # si es struct o mapa con campo :nombre
+      nombre when is_binary(nombre) -> nombre  # si ya es un string
+      _ -> equipo                # por si llega otro tipo
+    end
+  %{participante | equipo: nombre_equipo}
+  end
 
 
 
