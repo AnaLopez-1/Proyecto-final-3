@@ -47,3 +47,14 @@ defmodule Persistencia do
     leer_todos(tipo)
     |> Enum.find(&(&1[campo] == valor))
   end
+
+  #Función para actualizar archivos CSV
+  def actualizar(tipo, campo) do
+    lista =
+      leer_todos(tipo)
+      |> Enum.map(fn x ->
+        if x[campo] == valor, do: Map.drop(nuevo_dato, [:__struct__]), else: x
+      end)
+
+    escribir_todos(tipo, lista)
+  end
