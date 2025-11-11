@@ -96,7 +96,7 @@ defmodule Persistencia do
     end
   end
 
-  #Convierte el tipo a leer
+  #Función convertir tipo (Al leer)
   defp convertir_tipo(valor) do
     cond do
       valor =~ ~r/^\d+$/ -> String.to_integer(valor)
@@ -107,7 +107,5 @@ defmodule Persistencia do
     end
   end
 
-
-  # ARCHIVO SEGÚN TIPO
-  defp obtener_archivo(tipo), do: "#{tipo}.csv"
+    defp obtener_archivo(tipo), do: "#{tipo}.csv"
 end
