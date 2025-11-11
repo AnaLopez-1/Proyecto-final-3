@@ -19,4 +19,25 @@ defmodule Persistencia do
     end
   end
 
-  
+  #Función para leer archivos CSV
+    def leer_todos(tipo) do
+    archivo = obtener_archivo(tipo)
+
+    if File.exists?(archivo) do
+      [cabecera | filas] =
+        File.read!(archivo)
+        |> String.split("\n", trim: true)
+
+      claves = String.split(cabecera, ",") |> Enum.map(&String.to_atom/1)
+
+      Enum.map(filas, fn fila ->
+        valores =
+          String.split(fila, ",")
+          |> Enum.map(&convertir_tipo/1)
+
+        Enum.zip(claves, valores) |> Enum.into(%{})
+      end)
+    else
+      []
+    end
+  end
