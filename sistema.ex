@@ -50,6 +50,13 @@ defmodule Sistema do
   %{equipo | miembros: miembros_actualizados}
 end
 
+  def asignar_proyecto(equipo, proyecto) do
+    %{equipo | proyecto: proyecto}
+  end
+end
+
+
+
 
 
 
