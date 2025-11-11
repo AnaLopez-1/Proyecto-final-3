@@ -28,4 +28,14 @@ defmodule Sistema do
     Persistencia.leer_todos(tipo)
   end
 
+  def buscar_dato(tipo, campo, valor) do
+    Persistencia.buscar(tipo, campo, valor)
+  end
+
+  def actualizar_dato(tipo, campo, valor, nuevo_dato) do
+    Persistencia.actualizar(tipo, campo, valor, nuevo_dato)
+  end
+
+
+
 
