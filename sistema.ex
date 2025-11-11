@@ -78,10 +78,6 @@ def listar_nombre_equipos do
     end
   end
 
-  def asignar_proyecto(equipo, proyecto) do
-    %{equipo | proyecto: proyecto}
-  end
-end
 
 def asignar_equipo(participante, equipo) do
   nombre_equipo =
@@ -93,6 +89,31 @@ def asignar_equipo(participante, equipo) do
   %{participante | equipo: nombre_equipo}
   end
 
+   def listar_id_proyectos do
+    IO.puts("\n proyectos guardados:")
+    proyectos = Sistema.listar_datos(:proyecto)
+
+    if proyectos == [] do
+      IO.puts("No hay proyectos guardados aún.")
+    else
+
+      Enum.each(proyectos, fn proyecto->
+        IO.puts(" #{proyecto.id}}")
+      end)
+    end
+  end
+
+  def asignar_proyecto(equipo, proyecto) do
+  id_proyecto =
+    case proyecto do
+      %{id: id} -> id          # si es struct o mapa con campo :id
+      id when is_integer(id) -> id  # si ya es un número
+      _ -> proyecto                # por si llega otro tipo
+    end
+
+  %{equipo | proyecto: id_proyecto}
+end
+end
 
 
 
