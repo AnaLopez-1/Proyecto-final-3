@@ -36,6 +36,22 @@ defmodule Sistema do
     Persistencia.actualizar(tipo, campo, valor, nuevo_dato)
   end
 
+  # Lógica de negocio
+  def agregar_miembro(equipo, participante) do
+  miembros_actuales =
+    case equipo.miembros do
+      lista when is_list(lista) -> lista
+      "" -> []          # si viene vacío del CSV
+      nil -> []         # por si el campo no existe
+      otro -> [otro]    # si viene un solo nombre como string
+    end
+
+  miembros_actualizados = miembros_actuales ++ [participante]
+  %{equipo | miembros: miembros_actualizados}
+end
+
+
+
 
 
 
