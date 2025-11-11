@@ -49,7 +49,7 @@ defmodule Persistencia do
   end
 
   #Función para actualizar archivos CSV
-  def actualizar(tipo, campo) do
+  def actualizar(tipo, campo, valor, nuevo_dato) do
     lista =
       leer_todos(tipo)
       |> Enum.map(fn x ->
@@ -58,3 +58,11 @@ defmodule Persistencia do
 
     escribir_todos(tipo, lista)
   end
+
+  #Función para eliminar archivos CSV
+  def eliminar(tipo, campo, valor) do
+    nueva = Enum.reject(leer_todos(tipo), &(&1[campo] == valor))
+    escribir_todos(tipo, nueva)
+  end
+
+  
