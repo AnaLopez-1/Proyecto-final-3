@@ -43,7 +43,7 @@ defmodule Persistencia do
   end
 
   #Función para buscar archivos CSV
-    def buscar(tipo, campo, valor) do
+  def buscar(tipo, campo, valor) do
     leer_todos(tipo)
     |> Enum.find(&(&1[campo] == valor))
   end
@@ -65,4 +65,33 @@ defmodule Persistencia do
     escribir_todos(tipo, nueva)
   end
 
-  
+  #Función para escribir todo de manera Interna
+  defp escribir_todos(tipo, lista) do
+    archivo = obtener_archivo(tipo)
+
+    if lista == [] do
+      File.rm(archivo)
+    else
+      claves = Map.keys(hd(lista))
+
+      lineas =
+        [Enum.join(claves, ",")]
+        ++ Enum.map(lista, fn m ->
+          Enum.map(claves, fn clave ->
+            valor = m[clave]
+
+            cond do
+              is_list(valor) ->
+                Enum.map(valor, &inspect/1) |> Enum.join(";")
+              is_map(valor) ->
+                inspect(valor)
+              true ->
+                to_string(valor)
+            end
+          end)
+          |> Enum.join(",")
+        end)
+
+      File.write!(archivo, Enum.join(lineas, "\n"))
+    end
+  end
