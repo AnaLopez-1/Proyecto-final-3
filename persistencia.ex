@@ -41,3 +41,9 @@ defmodule Persistencia do
       []
     end
   end
+
+  #Función para buscar archivos CSV
+    def buscar(tipo, campo, valor) do
+    leer_todos(tipo)
+    |> Enum.find(&(&1[campo] == valor))
+  end
