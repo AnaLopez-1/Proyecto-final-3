@@ -50,6 +50,34 @@ defmodule Sistema do
   %{equipo | miembros: miembros_actualizados}
 end
 
+def listar_id_participantes do
+    IO.puts("\n Participantes guardados:")
+    participantes = Sistema.listar_datos(:participante)
+
+    if participantes == [] do
+      IO.puts("No hay participantes guardados aún.")
+    else
+
+      Enum.each(participantes, fn participante->
+        IO.puts(" #{participante.id}}")
+      end)
+    end
+  end
+
+def listar_nombre_equipos do
+    IO.puts("\n Equipos guardados:")
+    equipos = Sistema.listar_datos(:equipo)
+
+    if equipos == [] do
+      IO.puts("No hay equipos guardados aún.")
+    else
+
+      Enum.each(equipos, fn equipo->
+        IO.puts(" #{equipo.nombre}}")
+      end)
+    end
+  end
+
   def asignar_proyecto(equipo, proyecto) do
     %{equipo | proyecto: proyecto}
   end
