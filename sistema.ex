@@ -18,8 +18,14 @@ defmodule Sistema do
   def crear_proyecto(nombre, descripcion, categoria) do
     Modelos.Proyecto.crear(nombre, descripcion, categoria)
   end
+
   # Guardar en archivos globales
   def guardar_datos(tipo, dato) do
     Persistencia.guardar(tipo, dato)
   end
-  
+
+  def listar_datos(tipo) do
+    Persistencia.leer_todos(tipo)
+  end
+
+
