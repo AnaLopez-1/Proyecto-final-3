@@ -21,6 +21,15 @@ defp loop_comandos do
       Comandos disponibles:
       
       /registrar_participante  → Registrar participante
+      /crear_equipo            → Crear equipo
+
+      /crear_proyecto          → Crear proyecto a un equipo
+
+      /listar_equipos          → Listar equipos
+
+
+
+      /registrar_mentor        → Registrar mentor
       /salir                   → Salir del sistema
       """)
       loop_comandos()
