@@ -22,7 +22,7 @@ defp loop_comandos do
       
       /registrar_participante  → Registrar participante
       /crear_equipo            → Crear equipo
-
+      /agregar_participante    → Agregar participante a un equipo
       /crear_proyecto          → Crear proyecto a un equipo
 
       /listar_equipos          → Listar equipos
@@ -78,8 +78,29 @@ end
     menu()
   end
 
+   # OPCIÓN 3: Agregar participante a equipo
+  defp agregar_participante_equipo do
+    nombre_equipo = IO.gets("Nombre del equipo: ") |> String.trim()
+    id_participante = IO.gets("ID del participante: ") |> String.trim() |> String.to_integer()
 
+    equipo = Sistema.buscar_dato(:equipo, :nombre, nombre_equipo)
+    participante = Sistema.buscar_dato(:participante, :id, id_participante)
 
+    cond do
+      equipo == nil ->
+        IO.puts(" No se encontró el equipo.")
+      participante == nil ->
+        IO.puts(" No se encontró el participante.")
+      true ->
+        equipo_actualizado = Sistema.agregar_miembro(equipo, participante.id)
+        participante_actualizado = Sistema.asignar_equipo(participante, equipo.nombre)
+        Sistema.actualizar_dato(:participante, :nombre, nombre_equipo, participante_actualizado )
+        Sistema.actualizar_dato(:equipo, :nombre, nombre_equipo, equipo_actualizado)
+        IO.puts(" Participante agregado correctamente.")
+    end
+
+    menu()
+  end
 
 
   # OPCIÓN 4: Crear proyecto y asignarlo
