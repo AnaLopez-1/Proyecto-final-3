@@ -55,3 +55,16 @@ end
     IO.puts(" Participante registrado correctamente.")
     menu()
   end
+
+  
+  # OPCIÓN 2: Crear equipo
+  defp crear_equipo do
+    nombre = IO.gets("Nombre del equipo: ") |> String.trim()
+    tema = IO.gets("Tema del equipo: ") |> String.trim()
+
+    equipo = Sistema.crear_equipo(nombre, tema)
+    Sistema.guardar_datos(:equipo, equipo)
+
+    IO.puts(" Equipo creado correctamente.")
+    menu()
+  end
