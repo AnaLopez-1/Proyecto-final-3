@@ -114,3 +114,20 @@ end
 
     menu()
   end
+
+
+
+
+
+  # OPCIÓN 10: Registrar mentor
+  defp registrar_mentor do
+    id = IO.gets("ID del mentor: ") |> String.trim() |> String.to_integer()
+    nombre = IO.gets("Nombre del mentor: ") |> String.trim()
+    especialidad = IO.gets("Especialidad o área: ") |> String.trim()
+
+    mentor = Sistema.crear_mentor(id, nombre, especialidad)
+    Sistema.guardar_datos(:mentor, mentor)
+
+    IO.puts(" Mentor registrado correctamente.")
+    menu()
+  end
