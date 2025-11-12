@@ -68,3 +68,29 @@ end
     IO.puts(" Equipo creado correctamente.")
     menu()
   end
+
+
+
+
+
+  # OPCIÓN 4: Crear proyecto y asignarlo
+  defp crear_y_asignar_proyecto do
+    nombre_equipo = IO.gets("Nombre del equipo: ") |> String.trim()
+    equipo = Sistema.buscar_dato(:equipo, :nombre, nombre_equipo)
+
+    if equipo == nil do
+      IO.puts(" No se encontró el equipo.")
+    else
+      nombre_proy = IO.gets("Nombre del proyecto: ") |> String.trim()
+      desc = IO.gets("Descripción: ") |> String.trim()
+      categoria = IO.gets("Categoría: ") |> String.trim()
+
+      proyecto = Sistema.crear_proyecto(nombre_proy, desc, categoria)
+      equipo_act = Sistema.asignar_proyecto(equipo, proyecto)
+      Sistema.actualizar_dato(:equipo, :nombre, nombre_equipo, equipo_act)
+
+      IO.puts(" Proyecto creado y asignado correctamente.")
+    end
+
+    menu()
+  end
