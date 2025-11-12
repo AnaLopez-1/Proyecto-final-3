@@ -94,3 +94,23 @@ end
 
     menu()
   end
+
+
+
+
+
+  # OPCIÓN 6: Listar equipos
+  defp listar_equipos do
+    IO.puts("\n Equipos guardados:")
+    equipos = Sistema.listar_datos(:equipo)
+
+    if equipos == [] do
+      IO.puts("No hay equipos guardados aún.")
+    else
+      Enum.each(equipos, fn e ->
+        IO.puts(" #{e.nombre} (Tema: #{e.tema})")
+      end)
+    end
+
+    menu()
+  end
