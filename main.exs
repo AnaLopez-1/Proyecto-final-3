@@ -24,7 +24,7 @@ defp loop_comandos do
       /crear_equipo            → Crear equipo
       /agregar_participante    → Agregar participante a un equipo
       /crear_proyecto          → Crear proyecto a un equipo
-
+      /mostrar_equipo          → Mostrar equipo
       /listar_equipos          → Listar equipos
 
 
@@ -125,9 +125,20 @@ end
     menu()
   end
 
+  # OPCIÓN 5: Mostrar equipo
+  defp mostrar_equipo do
+    nombre = IO.gets("Nombre del equipo a mostrar: ") |> String.trim()
+    equipo = Sistema.buscar_dato(:equipo, :nombre, nombre)
 
+    if equipo == nil do
+      IO.puts(" No se encontró el equipo.")
+    else
+      IO.puts("\n Información del equipo:")
+      IO.inspect(equipo)
+    end
 
-
+    menu()
+  end
 
   # OPCIÓN 6: Listar equipos
   defp listar_equipos do
