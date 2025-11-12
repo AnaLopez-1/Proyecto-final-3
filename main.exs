@@ -35,6 +35,16 @@ defp loop_comandos do
       loop_comandos()
 
     "/registrar_participante" -> registrar_participante(); loop_comandos()
+    "/crear_equipo" -> crear_equipo(); loop_comandos()
+    "/agregar_participante" -> agregar_participante_equipo(); loop_comandos()
+    "/crear_proyecto" -> crear_y_asignar_proyecto(); loop_comandos()
+    "/mostrar_equipo" -> mostrar_equipo(); loop_comandos()
+    "/listar_equipos" -> listar_equipos(); loop_comandos()
+
+
+
+     "/registrar_mentor" -> registrar_mentor(); loop_comandos()
+    
     "/salir" ->
       
       IO.puts(" Saliendo del sistema...")
