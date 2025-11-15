@@ -220,5 +220,26 @@ end
   end
 
   #OPCIÓN  11: Asignar mentor a equipo
-  implementar asignación de mentor a equipo
+  defp asignar_mentor_equipo do
+    nombre_equipo = IO.gets("Nombre del equipo: ") |> String.trim()
+    id_mentor = IO.gets("ID del mentor: ") |> String.trim() |> String.to_integer()
 
+    equipo = Sistema.buscar_dato(:equipo, :nombre, nombre_equipo)
+    mentor = Sistema.buscar_dato(:mentor, :id, id_mentor)
+
+    cond do
+      equipo == nil ->
+        IO.puts(" No se encontró el equipo.")
+      mentor == nil ->
+        IO.puts(" No se encontró el mentor.")
+      true ->
+        equipo_actualizado = Map.put(equipo, :mentor, mentor)
+        Sistema.actualizar_dato(:equipo, :nombre, nombre_equipo, equipo_actualizado)
+        IO.puts(" Mentor asignado correctamente al equipo #{nombre_equipo}.")
+    end
+
+    menu()
+  end
+end
+
+Main.iniciar()
