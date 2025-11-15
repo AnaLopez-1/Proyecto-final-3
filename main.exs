@@ -28,6 +28,7 @@ defp loop_comandos do
       /listar_equipos          → Listar equipos
       /chat_equipo             → Chat por equipo
       /canal_general           → Canal general
+      /sala_tematica           → Sala temática
 
       /registrar_mentor        → Registrar mentor
       /salir                   → Salir del sistema
@@ -42,6 +43,7 @@ defp loop_comandos do
     "/listar_equipos" -> listar_equipos(); loop_comandos()
     "/chat_equipo" -> chat_equipo(); loop_comandos()
     "/canal_general" -> canal_general(); loop_comandos()
+    "/sala_tematica" -> sala_tematica(); loop_comandos()
 
     "/registrar_mentor" -> registrar_mentor(); loop_comandos()
     "/salir" ->
@@ -181,6 +183,24 @@ end
     case opcion do
       "1" -> Chat.mostrar_canal_general()
       "2" -> Chat.canal_general()
+      _ -> IO.puts(" Opción no válida.")
+    end
+
+    menu()
+  end
+
+  #OPCIÓN 9: Salas tematicas
+
+  defp sala_tematica do
+    nombre = IO.gets("Tema de la sala: ") |> String.trim()
+
+    IO.puts("\n1. Ver sala")
+    IO.puts("2. Escribir en sala")
+    opcion = IO.gets("→ Opción: ") |> String.trim()
+
+    case opcion do
+      "1" -> Chat.mostrar_sala_tematica(nombre)
+      "2" -> Chat.crear_sala_tematica(nombre)
       _ -> IO.puts(" Opción no válida.")
     end
 
