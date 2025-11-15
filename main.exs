@@ -190,7 +190,6 @@ end
   end
 
   #OPCIÓN 9: Salas tematicas
-
   defp sala_tematica do
     nombre = IO.gets("Tema de la sala: ") |> String.trim()
 
@@ -219,3 +218,7 @@ end
     IO.puts(" Mentor registrado correctamente.")
     menu()
   end
+
+  #OPCIÓN  11: Asignar mentor a equipo
+  implementar asignación de mentor a equipo
+
