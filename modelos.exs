@@ -16,6 +16,7 @@ defmodule Modelos do
   end
 
 
+
   defmodule Equipo do
   defstruct [:nombre, :tema, :miembros, :proyecto]
 

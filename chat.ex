@@ -46,3 +46,28 @@ defmodule Chat do
         bucle_chat(nombre_equipo)
     end
   end
+
+  #Función ver chat existente
+  def mostrar_chat(nombre_equipo) do
+    case File.read("chat_#{nombre_equipo}.txt") do
+      {:ok, contenido} when contenido != "" ->
+        IO.puts("\n Chat de #{nombre_equipo}:\n")
+        IO.puts(contenido)
+
+      {:ok, _} ->
+        IO.puts(" No hay mensajes en este chat.")
+
+      {:error, _} ->
+        IO.puts(" No existe chat para #{nombre_equipo}.")
+    end
+  end
+
+  #Función salas tematicas 
+  def crear_sala_tematica(nombre_tema) do
+    iniciar_chat("sala_#{nombre_tema}")
+  end
+
+  def mostrar_sala_tematica(nombre_tema) do
+    mostrar_chat("sala_#{nombre_tema}")
+  end
+end
