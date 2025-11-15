@@ -26,8 +26,8 @@ defp loop_comandos do
       /crear_proyecto          → Crear proyecto a un equipo
       /mostrar_equipo          → Mostrar equipo
       /listar_equipos          → Listar equipos
-
-
+      /chat_equipo             → Chat por equipo
+      /canal_general           → Canal general
 
       /registrar_mentor        → Registrar mentor
       /salir                   → Salir del sistema
@@ -40,11 +40,10 @@ defp loop_comandos do
     "/crear_proyecto" -> crear_y_asignar_proyecto(); loop_comandos()
     "/mostrar_equipo" -> mostrar_equipo(); loop_comandos()
     "/listar_equipos" -> listar_equipos(); loop_comandos()
+    "/chat_equipo" -> chat_equipo(); loop_comandos()
+    "/canal_general" -> canal_general(); loop_comandos()
 
-
-
-     "/registrar_mentor" -> registrar_mentor(); loop_comandos()
-    
+    "/registrar_mentor" -> registrar_mentor(); loop_comandos()
     "/salir" ->
       
       IO.puts(" Saliendo del sistema...")
@@ -166,9 +165,27 @@ end
     menu()
   end
 
+  # OPCIÓN 7: Chat por equipo 
+    defp chat_equipo do
+    nombre = IO.gets("Nombre del equipo: ") |> String.trim()
+    Chat.iniciar_chat(nombre)
+    menu()
+  end
 
+  # OPCIÓN 8: Chat general
+    defp canal_general do
+    IO.puts("\n1. Ver canal general")
+    IO.puts("2. Escribir en canal general")
+    opcion = IO.gets("→ Opción: ") |> String.trim()
 
+    case opcion do
+      "1" -> Chat.mostrar_canal_general()
+      "2" -> Chat.canal_general()
+      _ -> IO.puts(" Opción no válida.")
+    end
 
+    menu()
+  end
 
   # OPCIÓN 10: Registrar mentor
   defp registrar_mentor do
