@@ -29,8 +29,8 @@ defp loop_comandos do
       /chat_equipo             → Chat por equipo
       /canal_general           → Canal general
       /sala_tematica           → Sala temática
-
       /registrar_mentor        → Registrar mentor
+      /asignar_mentor          → Asignar mentor a un equipo
       /salir                   → Salir del sistema
       """)
       loop_comandos()
@@ -44,8 +44,8 @@ defp loop_comandos do
     "/chat_equipo" -> chat_equipo(); loop_comandos()
     "/canal_general" -> canal_general(); loop_comandos()
     "/sala_tematica" -> sala_tematica(); loop_comandos()
-
     "/registrar_mentor" -> registrar_mentor(); loop_comandos()
+    "/asignar_mentor" -> asignar_mentor_equipo(); loop_comandos()
     "/salir" ->
       
       IO.puts(" Saliendo del sistema...")
