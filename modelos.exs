@@ -15,10 +15,8 @@ defmodule Modelos do
     end
   end
 
-
-
   defmodule Equipo do
-  defstruct [:nombre, :tema, :miembros, :proyecto]
+  defstruct [:nombre, :tema, :miembros, :proyecto, :menor]
 
   def crear(nombre, tema) do
     %Modelos.Equipo{
@@ -26,10 +24,10 @@ defmodule Modelos do
       tema: tema,
       miembros: [],
       proyecto: nil
+      mentor: nil
     }
   end
 end
-
 
   defmodule Proyecto do
     defstruct [:id, :nombre, :descripcion, :categoria, :estado, :retroalimentacion]
@@ -56,7 +54,5 @@ end
         especialidad: especialidad
       }
     end
-
-
   end
 end

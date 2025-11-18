@@ -5,42 +5,121 @@ defmodule Persistencia do
   """
 
   #Función para guardar archivos CSV
-  def guardar(tipo, mapa) do
-    archivo = obtener_archivo(tipo)
+  def guardar(:participante, mapa) do
+    archivo = obtener_archivo(:participante)
     mapa = Map.drop(mapa, [:__struct__])
-    encabezado = Map.keys(mapa)
-    fila = Map.values(mapa) |> Enum.map(&to_string/1)
+
+    orden = [:id, :nombre, :correo, :afinidad, :equipo]
+    encabezado = Enum.join(orden, ",")
+    fila = orden |> Enum.map(&to_string(mapa[&1])) |> Enum.join(",")
 
     if not File.exists?(archivo) do
-      contenido = [Enum.join(encabezado, ","), Enum.join(fila, ",")]
-      File.write!(archivo, Enum.join(contenido, "\n"))
+      File.write!(archivo, encabezado <> "\n" <> fila)
     else
-      File.write!(archivo, "\n" <> Enum.join(fila, ","), [:append])
+      File.write!(archivo, "\n" <> fila, [:append])
     end
   end
+
+  def guardar(:equipo, mapa) do
+    archivo = obtener_archivo(:equipo)
+    mapa = Map.drop(mapa, [:__struct__])
+
+    orden = [:nombre, :tema, :proyecto, :miembros, :mentor]
+    encabezado = Enum.join(orden, ",")
+
+    fila =
+      orden
+      |> Enum.map(fn clave ->
+        valor = mapa[clave]
+
+        cond do
+          is_list(valor) -> Enum.join(valor, ";")
+          is_map(valor) -> valor.id
+          true -> to_string(valor)
+        end
+      end)
+      |> Enum.join(",")
+
+    if not File.exists?(archivo) do
+      File.write!(archivo, encabezado <> "\n" <> fila)
+    else
+      File.write!(archivo, "\n" <> fila, [:append])
+    end
+  end
+
+  def guardar(:proyecto, mapa) do
+    archivo = obtener_archivo(:proyecto)
+    mapa = Map.drop(mapa, [:__struct__])
+
+    orden = [:id, :nombre, :descripcion, :categoria, :estado, :retroalimentacion, :equipo]
+    encabezado = Enum.join(orden, ",")
+
+    fila =
+      orden
+      |> Enum.map(fn clave ->
+        valor = mapa[clave]
+
+        cond do
+          is_list(valor) -> Enum.join(valor, ";")
+          true -> to_string(valor)
+        end
+      end)
+      |> Enum.join(",")
+
+    if not File.exists?(archivo) do
+      File.write!(archivo, encabezado <> "\n" <> fila)
+    else
+      File.write!(archivo, "\n" <> fila, [:append])
+    end
+  end
+
+  def guardar(:mentor, mapa) do
+  archivo = obtener_archivo(:mentor)
+  mapa = Map.drop(mapa, [:__struct__])
+
+  # Define el orden de los campos que quieres guardar
+  orden = [:id, :nombre, :especialidad]
+  encabezado = Enum.join(orden, ",")
+  fila = orden |> Enum.map(&to_string(mapa[&1])) |> Enum.join(",")
+
+  if not File.exists?(archivo) do
+    File.write!(archivo, encabezado <> "\n" <> fila)
+  else
+    File.write!(archivo, "\n" <> fila, [:append])
+  end
+end
 
   #Función para leer archivos CSV
-    def leer_todos(tipo) do
-    archivo = obtener_archivo(tipo)
+  def leer_todos(tipo) do
+  archivo = obtener_archivo(tipo)
 
-    if File.exists?(archivo) do
-      [cabecera | filas] =
-        File.read!(archivo)
-        |> String.split("\n", trim: true)
+  if File.exists?(archivo) do
+    [cabecera | filas] =
+      File.read!(archivo)
+      |> String.split("\n", trim: true)
 
-      claves = String.split(cabecera, ",") |> Enum.map(&String.to_atom/1)
+    claves =
+      String.split(cabecera, ",")
+      |> Enum.map(&String.trim/1)
+      |> Enum.reject(&(&1 == ""))
+      |> Enum.map(&String.to_atom/1)
 
-      Enum.map(filas, fn fila ->
-        valores =
-          String.split(fila, ",")
-          |> Enum.map(&convertir_tipo/1)
+    filas
+    |> Enum.map(fn fila ->
+      fila = String.trim(fila)
 
+      if fila == "" do
+        nil
+      else
+        valores = String.split(fila, ",") |> Enum.map(&convertir_tipo/1)
         Enum.zip(claves, valores) |> Enum.into(%{})
-      end)
-    else
-      []
-    end
+      end
+    end)
+    |> Enum.reject(&is_nil/1)
+  else
+    []
   end
+end
 
   #Función para buscar archivos CSV
   def buscar(tipo, campo, valor) do
@@ -97,15 +176,28 @@ defmodule Persistencia do
   end
 
   #Función convertir tipo (Al leer)
-  defp convertir_tipo(valor) do
-    cond do
-      valor =~ ~r/^\d+$/ -> String.to_integer(valor)
-      valor == "true" -> true
-      valor == "false" -> false
-      String.contains?(valor, ";") -> String.split(valor, ";")
-      true -> valor
-    end
+  defp convertir_tipo(""), do: nil
+
+defp convertir_tipo(valor) do
+  cond do
+    valor =~ ~r/^\d+$/ ->
+      String.to_integer(valor)
+
+    String.contains?(valor, ";") ->
+      valor
+      |> String.split(";")
+      |> Enum.map(fn v ->
+        try do
+          String.to_integer(v)
+        rescue
+          _ -> v
+        end
+      end)
+
+    true ->
+      valor
   end
+end
 
     defp obtener_archivo(tipo), do: "#{tipo}.csv"
 end
