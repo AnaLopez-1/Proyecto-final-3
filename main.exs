@@ -35,6 +35,26 @@ defp loop_comandos do
       """)
       loop_comandos()
 
+      "/project " <> nombre ->
+        mostrar_proyecto_equipo(String.trim(nombre))
+        loop_comandos()
+
+      "/project" ->
+        nombre = IO.gets("Nombre del equipo: ") |> String.trim()
+        mostrar_proyecto_equipo(nombre)
+        loop_comandos()
+
+      "/join " <> nombre_equipo ->
+        join_equipo(String.trim(nombre_equipo))
+        loop_comandos()
+
+      "/join" ->
+        nombre = IO.gets("Nombre del equipo: ") |> String.trim()
+        join_equipo(nombre)
+        loop_comandos()
+
+      "/teams" -> listar_equipos(); loop_comandos()
+
     "/registrar_participante" -> registrar_participante(); loop_comandos()
     "/crear_equipo" -> crear_equipo(); loop_comandos()
     "/agregar_participante" -> agregar_participante_equipo(); loop_comandos()
@@ -46,6 +66,15 @@ defp loop_comandos do
     "/sala_tematica" -> sala_tematica(); loop_comandos()
     "/registrar_mentor" -> registrar_mentor(); loop_comandos()
     "/asignar_mentor" -> asignar_mentor_equipo(); loop_comandos()
+
+    "/feedback " <> nombre_equipo ->
+      enviar_feedback(String.trim(nombre_equipo))
+      loop_comandos()
+
+    "/consultar_mentor" ->
+      consultar_mentor()
+      loop_comandos()
+
     "/salir" ->
       
       IO.puts(" Saliendo del sistema...")
@@ -60,8 +89,6 @@ defp loop_comandos do
   end
 end
 
-
-  
   # OPCIÓN 1: Registrar participante
   defp registrar_participante do
     id = IO.gets("ID: ") |> String.trim() |> String.to_integer()
@@ -239,6 +266,93 @@ end
     end
 
     menu()
+  end
+end
+
+    defp join_equipo(nombre_equipo) do
+    equipo = Sistema.buscar_dato(:equipo, :nombre, nombre_equipo)
+
+    cond do
+      equipo == nil ->
+        IO.puts("No se encontró el equipo #{nombre_equipo}.")
+
+      true ->
+        nombre_usuario = IO.gets("Tu nombre de usuario: ") |> String.trim()
+        participante = Sistema.buscar_dato(:participante, :nombre, nombre_usuario)
+
+        if participante == nil do
+          IO.puts("No se encontró tu usuario. Regístrate primero con /registrar_participante.")
+        else
+          equipo_actualizado = Sistema.agregar_miembro(equipo, participante.id)
+          participante_actualizado = Sistema.asignar_equipo(participante, equipo.nombre)
+
+          Sistema.actualizar_dato(:equipo, :nombre, equipo.nombre, equipo_actualizado)
+          Sistema.actualizar_dato(:participante, :id, participante.id, participante_actualizado)
+
+          IO.puts("Te uniste correctamente al equipo #{equipo.nombre}.")
+        end
+    end
+  end
+
+  defp chat_equipo do
+    nombre_usuario = IO.gets("Tu nombre de usuario: ") |> String.trim()
+    participante = Sistema.buscar_dato(:participante, :nombre, nombre_usuario)
+
+    cond do
+      participante == nil ->
+        IO.puts("No se encontró tu usuario. Regístrate primero con /registrar_participante.")
+
+      participante.equipo == nil ->
+        IO.puts("No estás asignado a ningún equipo. Únete a uno con /join <equipo>.")
+
+      true ->
+        Chat.iniciar_chat(participante.equipo)
+    end
+  end
+
+  defp enviar_feedback(nombre_equipo) do
+    equipo = Sistema.buscar_dato(:equipo, :nombre, nombre_equipo)
+
+    cond do
+      equipo == nil ->
+        IO.puts("No se encontró el equipo #{nombre_equipo}.")
+
+      equipo.mentor == nil ->
+        IO.puts("El equipo no tiene mentor asignado.")
+
+      true ->
+        feedback = IO.gets("Escribe tu retroalimentación: ") |> String.trim()
+        proyecto = Sistema.buscar_dato(:proyecto, :id, equipo.proyecto)
+
+        if proyecto do
+          proyecto_feedback = Map.update(proyecto, :feedback, [feedback], fn f -> [feedback | f] end)
+          Sistema.actualizar_dato(:proyecto, :id, proyecto.id, proyecto_feedback)
+          IO.puts("Retroalimentación enviada al equipo #{nombre_equipo}.")
+        else
+          IO.puts("No se encontró el proyecto del equipo.")
+        end
+    end
+  end
+
+  defp consultar_mentor do
+    nombre_usuario = IO.gets("Tu nombre de usuario: ") |> String.trim()
+    participante = Sistema.buscar_dato(:participante, :nombre, nombre_usuario)
+
+    cond do
+      participante == nil ->
+        IO.puts("No se encontró tu usuario.")
+
+      participante.equipo == nil ->
+        IO.puts("No estás asignado a ningún equipo.")
+
+      true ->
+        equipo = Sistema.buscar_dato(:equipo, :nombre, participante.equipo)
+        if equipo.mentor do
+          IO.puts("Mentor asignado: #{equipo.mentor.nombre} (#{equipo.mentor.especialidad})")
+        else
+          IO.puts("No hay mentor asignado a tu equipo.")
+        end
+    end
   end
 end
 

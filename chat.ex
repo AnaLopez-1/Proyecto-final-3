@@ -22,7 +22,7 @@ defmodule Chat do
     bucle_chat(nombre_equipo)
   end
 
-  defp bucle_chat(nombre_equipo) do
+    defp bucle_chat(nombre_equipo) do
     mensaje = IO.gets("\nEscribe un mensaje (o 'salir' / 'ver' / 'vivo'): ") |> String.trim()
 
     cond do
@@ -46,6 +46,60 @@ defmodule Chat do
         bucle_chat(nombre_equipo)
     end
   end
+<<<<<<< HEAD
+
+  #Función ver chat existente 
+  def mostrar_chat(nombre_equipo) do
+    case File.read("chat_#{nombre_equipo}.txt") do
+      {:ok, contenido} when contenido != "" ->
+        IO.puts("\n Chat de #{nombre_equipo}:\n")
+        IO.puts(contenido)
+
+      {:ok, _} ->
+        IO.puts(" No hay mensajes en este chat.")
+
+      {:error, _} ->
+        IO.puts(" No existe chat para #{nombre_equipo}.")
+    end
+  end
+
+  # CHAT EN VIVO (simula tiempo real)
+
+  def chat_en_vivo(nombre_equipo) do
+    IO.puts("\n chat en vivo para #{nombre_equipo}")
+
+    loop = fn loop_fun, anterior ->
+      case File.read("chat_#{nombre_equipo}.txt") do
+        {:ok, contenido} ->
+          if contenido != anterior do
+            IO.puts("\n--- Actualización ---")
+            IO.puts(contenido)
+          end
+          :timer.sleep(3000)
+          loop_fun.(loop_fun, contenido)
+
+        _ ->
+          IO.puts(" No existe chat #{nombre_equipo}.")
+      end
+    end
+
+    loop.(loop, "")
+  end
+
+
+  # SALAS TEMÁTICAS
+
+  def crear_sala_tematica(nombre_tema) do
+    iniciar_chat("sala_#{nombre_tema}")
+  end
+
+  def mostrar_sala_tematica(nombre_tema) do
+    mostrar_chat("sala_#{nombre_tema}")
+  end
+end
+
+
+=======
 
   #Función ver chat existente
   def mostrar_chat(nombre_equipo) do
@@ -71,3 +125,4 @@ defmodule Chat do
     mostrar_chat("sala_#{nombre_tema}")
   end
 end
+>>>>>>> 2ad96961d26550771e369bb662a76846e322f0fe
